@@ -1,7 +1,21 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const AdminSidebar = ({children}) => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            toast.success("Logged out successfully");
+            navigate("/", { replace: true });
+        } catch (error) {
+            toast.error("Logout failed");
+        }
+    };
 
     const menus = [
         {
@@ -9,8 +23,8 @@ const AdminSidebar = ({children}) => {
             link: 'dashboard'
         },
         {
-            name: 'Shops',
-            link: 'shops'
+            name: 'Shop Approval',
+            link: 'shop-approval'
         },
         {
             name: 'Game Center',
@@ -79,7 +93,10 @@ const AdminSidebar = ({children}) => {
             </div>
             <div className="flex flex-col flex-grow">
                 <div className="flex items-center flex-shrink-0 h-16 px-8">
-                    <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded text-white bg-red-500 hover:bg-gray-300">
+                    <button 
+                        onClick={handleLogout}
+                        className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded text-white bg-red-500 hover:bg-red-600 transition-colors"
+                    >
                         Logout
                     </button>
                     {/* <button className="relative ml-2 text-sm focus:outline-none group">

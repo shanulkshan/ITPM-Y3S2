@@ -25,12 +25,12 @@ function Button({
 
   return (
     <button
-      className={`min-w-40  rounded-lg px-8 py-3 text-md font-medium ${className}`}
-      // style={{transition: 'all 0.3s ease'}}
+      className={`min-w-40 rounded-2xl px-8 py-3 text-md font-medium shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 border border-transparent hover:border-white/20 ${className}`}
       style={{
         background: hoverColorNew,
         color: textColor,
-        transition: "all 0.3s ease",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        backdropFilter: "blur(10px)",
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

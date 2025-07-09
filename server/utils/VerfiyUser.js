@@ -1,5 +1,6 @@
 import  Jwt  from "jsonwebtoken";
 import { errorHandle } from "../utils/error.js";
+import User from "../models/User.model.js";
 
 
 export const verifyToken = (req, res, next) => {
@@ -17,4 +18,22 @@ export const verifyToken = (req, res, next) => {
         next();
     });
 
+};
+
+export const verifyAdmin = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id);
+        
+        if (!user) {
+            return next(errorHandle(404, 'User not found'));
+        }
+
+        if (user.role !== 'admin' && user.userType !== 'admin') {
+            return next(errorHandle(403, 'Access denied. Admin privileges required.'));
+        }
+
+        next();
+    } catch (error) {
+        next(error);
+    }
 };

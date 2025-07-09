@@ -6,7 +6,7 @@ import ProductList from './ProductList';
 
 const HomePage = () => {
   return (
-    <div>
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <HomeBanner />
       <PromoSection />
       <ProductList  />
