@@ -10,11 +10,8 @@ import Shops from "./pages/User/Shops/Shops";
 import Promotions from "./pages/User/Promotions/Promotions";
 import AdminLayout from './pages/Admin/components/AdminLayout/AdminLayout';
 import AdminDashboard from './pages/Admin/pages/AdminDashboard/AdminDashboard';
-import GameCenter from './pages/Admin/pages/GameCenter/GameCenter';
 import ErrorPage from "./components/404/ErrorPage";
 import QRcodePage from "./pages/User/QRcode/QRcodePage";
-import GamingRoomBookings from "./pages/Admin/pages/GamingRoomBookings/GamingRoomBookings";
-import GamingRoomMain from "./pages/User/GamingRoom/GamingRoomMain";
 import PublicLayoutDark from './components/PublicLayout/PublicLayoutDark';
 import Profile from "./pages/User/Profile/Profile";
 
@@ -143,7 +140,6 @@ function AppContent() {
                       <Route path="/create-admin" element={<CreateAdmin />} />
 
                       <Route path="/qr-scan" element={<QRcodePage />} />
-                      {/* <Route path="/gaming-room" element={<GamingRoomMain />} /> */}
 
                       <Route path="*" element={<ErrorPage />} />
 
@@ -151,8 +147,6 @@ function AppContent() {
                   </PublicLayout>
                 }
               />
-
-              <Route path="/gaming-room" element={<PublicLayoutDark><GamingRoomMain /></PublicLayoutDark>} />
 
               {/* Seller routes */}
               <Route
@@ -182,8 +176,6 @@ function AppContent() {
                       <Routes>
                         <Route path="/" element={<Navigate to="dashboard" />} />
                         <Route path="/dashboard" element={<AdminDashboard />} />
-                        <Route path="game-center" element={<GameCenter />} />
-                        <Route path="gaming-room-bookings" element={<GamingRoomBookings />} />
                         <Route path="shop-approval" element={<ShopApproval />} />
                         <Route path="*" element={<ErrorPage />} />
                         <Route path="/promotion-list" element={<PromotionList />} />

@@ -27,14 +27,6 @@ const AdminSidebar = ({children}) => {
             link: 'shop-approval'
         },
         {
-            name: 'Game Center',
-            link: 'game-center'
-        },
-        {
-            name: 'Gaming Room Bookings',
-            link: 'gaming-room-bookings'
-        },
-        {
             name: 'Promotion List',
             link: 'promotion-list'
         }

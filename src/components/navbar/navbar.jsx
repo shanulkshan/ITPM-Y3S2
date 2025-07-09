@@ -7,6 +7,17 @@ import NavbarData from "../../data/NavbarData";
 import { useAuth } from "../../context/AuthContext";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { toast } from "react-toastify";
+import { 
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+  UserIcon,
+  Bars3Icon,
+  XMarkIcon,
+  SunIcon,
+  MoonIcon,
+  HeartIcon,
+  BellIcon
+} from "@heroicons/react/24/outline";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

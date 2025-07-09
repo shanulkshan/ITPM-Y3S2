@@ -7,7 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useDarkMode } from "../../../../context/DarkModeContext";
 
-const GameBookingCancel = ({ isOpen, toggleModal, onDetele }) => {
+const PromotionCancel = ({ isOpen, toggleModal, onDetele }) => {
   const { isDarkMode } = useDarkMode();
   const [showModal, setShowModal] = React.useState(false);
 
@@ -99,4 +99,4 @@ const GameBookingCancel = ({ isOpen, toggleModal, onDetele }) => {
   );
 };
 
-export default GameBookingCancel;
+export default PromotionCancel;

@@ -18,7 +18,6 @@ const Footer = () => {
     { name: "Shops", href: "/shops" },
     { name: "Promotions", href: "/promotions" },
     { name: "QR Scanner", href: "/qr-scan" },
-    { name: "Gaming Room", href: "/gaming-room" },
   ];
 
   const company = [

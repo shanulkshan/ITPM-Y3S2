@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useDarkMode } from '../../../context/DarkModeContext';
+import {
+  MagnifyingGlassIcon,
+  FunnelIcon,
+  MapPinIcon,
+  ClockIcon,
+  BuildingStorefrontIcon,
+  TagIcon,
+  XMarkIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  SparklesIcon,
+  FireIcon,
+  StarIcon
+} from '@heroicons/react/24/outline';
 
 const Shops = () => {
+  const { isDarkMode } = useDarkMode();
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     category: 'all',
     floor: 'all',
@@ -13,19 +31,25 @@ const Shops = () => {
   });
 
   const categories = [
-    'Clothing',
-    'Electronics', 
-    'Books',
-    'Beauty',
-    'Home & Garden',
-    'Sports',
-    'Toys',
-    'Food',
-    'Accessories',
-    'Other'
+    { name: 'Clothing', icon: '👕', color: 'from-pink-500 to-rose-500' },
+    { name: 'Electronics', icon: '📱', color: 'from-blue-500 to-cyan-500' },
+    { name: 'Books', icon: '📚', color: 'from-green-500 to-emerald-500' },
+    { name: 'Beauty', icon: '💄', color: 'from-purple-500 to-pink-500' },
+    { name: 'Home & Garden', icon: '🏠', color: 'from-orange-500 to-yellow-500' },
+    { name: 'Sports', icon: '⚽', color: 'from-red-500 to-orange-500' },
+    { name: 'Toys', icon: '🧸', color: 'from-indigo-500 to-purple-500' },
+    { name: 'Food', icon: '🍕', color: 'from-yellow-500 to-orange-500' },
+    { name: 'Accessories', icon: '⌚', color: 'from-teal-500 to-cyan-500' },
+    { name: 'Other', icon: '🛍️', color: 'from-gray-500 to-gray-600' }
   ];
 
-  const floors = ['G', 'L1', 'L2', 'L3', 'L5'];
+  const floors = [
+    { code: 'G', name: 'Ground Floor', description: 'Main entrance level' },
+    { code: 'L1', name: 'Level 1', description: 'Fashion & lifestyle' },
+    { code: 'L2', name: 'Level 2', description: 'Electronics & tech' },
+    { code: 'L3', name: 'Level 3', description: 'Food court & dining' },
+    { code: 'L5', name: 'Level 5', description: 'Entertainment & services' }
+  ];
 
   useEffect(() => {
     fetchShops();
@@ -96,179 +120,313 @@ const Shops = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Browse Our Shops</h1>
-          <p className="text-gray-600 dark:text-gray-300">Discover amazing stores across all floors of our shopping mall</p>
-        </div>
+        {/* Hero Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6">
+            <BuildingStorefrontIcon className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-4">
+            Discover Amazing Shops
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Explore {shops.length}+ premium stores across all floors of our modern shopping mall
+          </p>
+        </motion.div>
 
-        {/* Filters and Search */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8 border border-gray-200 dark:border-gray-700">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            
-            {/* Search */}
-            <div className="lg:col-span-2">
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Search Shops
-              </label>
-              <input
-                type="text"
-                id="search"
-                value={filters.search}
-                onChange={handleSearchChange}
-                placeholder="Search by shop name..."
-                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"
-              />
-            </div>
-
-            {/* Category Filter */}
-            <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Category
-              </label>
-              <select
-                id="category"
-                value={filters.category}
-                onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"
+        {/* Quick Category Filter Pills */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-8"
+        >
+          <div className="flex flex-wrap gap-3 justify-center">
+            <button
+              onClick={() => handleFilterChange('category', 'all')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                filters.category === 'all'
+                  ? 'bg-blue-500 text-white shadow-lg scale-105'
+                  : 'bg-white/70 dark:bg-gray-800/70 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 backdrop-blur-md border border-gray-200 dark:border-gray-600'
+              }`}
+            >
+              <SparklesIcon className="w-4 h-4 inline mr-1" />
+              All Shops
+            </button>
+            {categories.slice(0, 6).map((category) => (
+              <button
+                key={category.name}
+                onClick={() => handleFilterChange('category', category.name)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  filters.category === category.name
+                    ? 'bg-blue-500 text-white shadow-lg scale-105'
+                    : 'bg-white/70 dark:bg-gray-800/70 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 backdrop-blur-md border border-gray-200 dark:border-gray-600'
+                }`}
               >
-                <option value="all">All Categories</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-            </div>
+                <span className="mr-1">{category.icon}</span>
+                {category.name}
+              </button>
+            ))}
+          </div>
+        </motion.div>
 
-            {/* Floor Filter */}
-            <div>
-              <label htmlFor="floor" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Floor
-              </label>
-              <select
-                id="floor"
-                value={filters.floor}
-                onChange={(e) => handleFilterChange('floor', e.target.value)}
-                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"
-              >
-                <option value="all">All Floors</option>
-                {floors.map(floor => (
-                  <option key={floor} value={floor}>{floor}</option>
-                ))}
-              </select>
+        {/* Search and Advanced Filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/30 p-6 mb-8"
+        >
+          {/* Search Bar */}
+          <div className="relative mb-6">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
             </div>
-
-            {/* Sort */}
-            <div>
-              <label htmlFor="sort" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Sort By
-              </label>
-              <select
-                id="sort"
-                value={filters.sortBy}
-                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"
-              >
-                <option value="newest">Newest First</option>
-                <option value="name">Name A-Z</option>
-                <option value="category">Category</option>
-                <option value="floor">Floor & Stall</option>
-              </select>
-            </div>
+            <input
+              type="text"
+              value={filters.search}
+              onChange={handleSearchChange}
+              placeholder="Search shops by name, category, or description..."
+              className="w-full pl-12 pr-4 py-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-2xl border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-lg"
+            />
           </div>
 
-          {/* Clear Filters */}
-          <div className="mt-4 flex justify-between items-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {shops.length} shop{shops.length !== 1 ? 's' : ''} found
-            </p>
+          {/* Advanced Filters Toggle */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                {shops.length} shop{shops.length !== 1 ? 's' : ''} found
+              </span>
+              {(filters.category !== 'all' || filters.floor !== 'all' || filters.search) && (
+                <button
+                  onClick={clearFilters}
+                  className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium transition-colors"
+                >
+                  <XMarkIcon className="w-4 h-4" />
+                  Clear Filters
+                </button>
+              )}
+            </div>
             <button
-              onClick={clearFilters}
-              className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors rounded-lg px-3 py-1 hover:bg-indigo-50 dark:hover:bg-indigo-900/50"
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300"
             >
-              Clear All Filters
+              <FunnelIcon className="w-4 h-4" />
+              Advanced Filters
             </button>
           </div>
-        </div>
+
+          {/* Advanced Filters Panel */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-600"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Category Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <TagIcon className="w-4 h-4 inline mr-1" />
+                      Category
+                    </label>
+                    <select
+                      value={filters.category}
+                      onChange={(e) => handleFilterChange('category', e.target.value)}
+                      className="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all"
+                    >
+                      <option value="all">All Categories</option>
+                      {categories.map(category => (
+                        <option key={category.name} value={category.name}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Floor Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <MapPinIcon className="w-4 h-4 inline mr-1" />
+                      Floor
+                    </label>
+                    <select
+                      value={filters.floor}
+                      onChange={(e) => handleFilterChange('floor', e.target.value)}
+                      className="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all"
+                    >
+                      <option value="all">All Floors</option>
+                      {floors.map(floor => (
+                        <option key={floor.code} value={floor.code}>
+                          {floor.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Sort Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <StarIcon className="w-4 h-4 inline mr-1" />
+                      Sort By
+                    </label>
+                    <select
+                      value={filters.sortBy}
+                      onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+                      className="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all"
+                    >
+                      <option value="newest">Newest First</option>
+                      <option value="name">Name A-Z</option>
+                      <option value="category">Category</option>
+                      <option value="floor">Floor & Stall</option>
+                    </select>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
         {/* Shops Grid */}
         {shops.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-400 dark:text-gray-500 mb-4">
-              <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center py-16"
+          >
+            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center">
+              <BuildingStorefrontIcon className="w-12 h-12 text-gray-400 dark:text-gray-500" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No shops found</h3>
-            <p className="text-gray-600 dark:text-gray-400">Try adjusting your filters or search terms</p>
-          </div>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">No shops found</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-lg mb-6 max-w-md mx-auto">
+              We couldn't find any shops matching your criteria. Try adjusting your filters or search terms.
+            </p>
+            <button
+              onClick={clearFilters}
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-2xl hover:shadow-lg hover:scale-105 transition-all duration-300"
+            >
+              Clear All Filters
+            </button>
+          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {shops.map((shop) => (
-              <Link 
-                key={shop._id} 
-                to={`/shop/${shop._id}`}
-                className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg dark:shadow-gray-900/20 transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600"
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          >
+            {shops.map((shop, index) => (
+              <motion.div
+                key={shop._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+                className="group"
               >
-                {/* Shop Image */}
-                <div className="aspect-w-16 aspect-h-9 bg-gray-200">
-                  <img
-                    src={shop.shopLogo && (shop.shopLogo.startsWith('data:') || shop.shopLogo.startsWith('http'))
-                      ? shop.shopLogo
-                      : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNTAgNjBDODAgNjAgMjAgMTAwIDIwIDEwMFM4MDE0MCAxNTAgMTQwUzI4MCAxMDAgMjgwIDEwMFMyMjAgNjAgMTUwIDYwWiIgZmlsbD0iIzlDQTNBRiIvPgo8cGF0aCBkPSJNMTUwIDEyMEMxNjIuNDI2IDEyMCAxNzIuNSAxMDkuOTI2IDE3Mi41IDk3LjVDMTcyLjUgODUuMDc0IDE2Mi40MjYgNzUgMTUwIDc1QzEzNy41NzQgNzUgMTI3LjUgODUuMDc0IDEyNy41IDk3LjVDMTI3LjUgMTA5LjkyNiAxMzcuNTc0IDEyMCAxNTAgMTIwWiIgZmlsbD0iIzYzNjk3NSIvPgo8dGV4dCB4PSIxNTAiIHk9IjE3MCIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNjM2OTc1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TaG9wPC90ZXh0Pgo8L3N2Zz4K'
-                    }
-                    alt={shop.shopName}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
-                    onError={(e) => {
-                      e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNTAgNjBDODAgNjAgMjAgMTAwIDIwIDEwMFM4MCAxNDAgMTUwIDE0MFMyODAgMTAwIDI4MCAxMDBTMjIwIDYwIDE1MCA2MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTE1MCAxMjBDMTYyLjQyNiAxMjAgMTcyLjUgMTA5LjkyNiAxNzIuNSA5Ny41QzE3Mi41IDg1LjA3NCAxNjIuNDI2IDc1IDE1MCA3NUMxMzcuNTc0IDc1IDEyNy41IDg1LjA3NCAxMjcuNSA5Ny41QzEyNy41IDEwOS45MjYgMTM3LjU3NCAxMjAgMTUwIDEyMFoiIGZpbGw9IiM2MzY5NzUiLz4KPHR4dCB4PSIxNTAiIHk9IjE3MCIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNjM2OTc1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TaG9wPC90ZXh0Pgo8L3N2Zz4K';
-                    }}
-                  />
-                </div>
+                <Link 
+                  to={`/shop/${shop._id}`}
+                  className="block bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/20 dark:border-gray-700/30"
+                >
+                  {/* Shop Image */}
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={shop.shopLogo && (shop.shopLogo.startsWith('data:') || shop.shopLogo.startsWith('http'))
+                        ? shop.shopLogo
+                        : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNTAgNjBDODAgNjAgMjAgMTAwIDIwIDEwMFM4MDE0MCAxNTAgMTQwUzI4MCAxMDAgMjgwIDEwMFMyMjAgNjAgMTUwIDYwWiIgZmlsbD0iIzlDQTNBRiIvPgo8cGF0aCBkPSJNMTUwIDEyMEMxNjIuNDI2IDEyMCAxNzIuNSAxMDkuOTI2IDE3Mi41IDk3LjVDMTcyLjUgODUuMDc0IDE2Mi40MjYgNzUgMTUwIDc1QzEzNy41NzQgNzUgMTI3LjUgODUuMDc0IDEyNy41IDk3LjVDMTI3LjUgMTA5LjkyNiAxMzcuNTc0IDEyMCAxNTAgMTIwWiIgZmlsbD0iIzYzNjk3NSIvPgo8dGV4dCB4PSIxNTAiIHk9IjE3MCIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNjM2OTc1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TaG9wPC90ZXh0Pgo8L3N2Zz4K'
+                      }
+                      alt={shop.shopName}
+                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNTAgNjBDODAgNjAgMjAgMTAwIDIwIDEwMFM4MCAxNDAgMTUwIDE0MFMyODAgMTAwIDI4MCAxMDBTMjIwIDYwIDE1MCA2MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTE1MCAxMjBDMTYyLjQyNiAxMjAgMTcyLjUgMTA5LjkyNiAxNzIuNSA5Ny41QzE3Mi41IDg1LjA3NCAxNjIuNDI2IDc1IDE1MCA3NUMxMzcuNTc0IDc1IDEyNy41IDg1LjA3NCAxMjcuNSA5Ny41QzEyNy41IDEwOS45MjYgMTM3LjU3NCAxMjAgMTUwIDEyMFoiIGZpbGw9IiM2MzY5NzUiLz4KPHR4dCB4PSIxNTAiIHk9IjE3MCIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNjM2OTc1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TaG9wPC90ZXh0Pgo8L3N2Zz4K';
+                      }}
+                    />
+                    
+                    {/* Status Badge */}
+                    <div className="absolute top-4 right-4">
+                      <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-md ${
+                        shop.isOpen 
+                          ? 'bg-green-500/90 text-white' 
+                          : 'bg-red-500/90 text-white'
+                      }`}>
+                        {shop.isOpen ? (
+                          <CheckCircleIcon className="w-3 h-3" />
+                        ) : (
+                          <XCircleIcon className="w-3 h-3" />
+                        )}
+                        {shop.isOpen ? 'Open' : 'Closed'}
+                      </div>
+                    </div>
 
-                {/* Shop Info */}
-                <div className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      {shop.shopName}
-                    </h3>
-                    <span className="text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300 px-2 py-1 rounded-full">
-                      {shop.floorNumber}-{shop.stallNumber}
-                    </span>
+                    {/* Floor Badge */}
+                    <div className="absolute top-4 left-4">
+                      <div className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/90 text-white backdrop-blur-md">
+                        <MapPinIcon className="w-3 h-3" />
+                        {shop.floorNumber}-{shop.stallNumber}
+                      </div>
+                    </div>
                   </div>
-                  
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{shop.category}</p>
-                  
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 overflow-hidden" style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical'
-                  }}>
-                    {shop.description}
-                  </p>
-                  
-                  <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-                    <span>By {shop.sellerId?.username}</span>
-                    <span className={`px-2 py-1 rounded-full ${
-                      shop.isOpen 
-                        ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300' 
-                        : 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300'
-                    }`}>
-                      {shop.isOpen ? 'Open' : 'Closed'}
-                    </span>
+
+                  {/* Shop Info */}
+                  <div className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1">
+                          {shop.shopName}
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          {categories.find(cat => cat.name === shop.category) && (
+                            <span className="text-sm">
+                              {categories.find(cat => cat.name === shop.category)?.icon}
+                            </span>
+                          )}
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            {shop.category}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                      {shop.description}
+                    </p>
+                    
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                        <ClockIcon className="w-3 h-3" />
+                        <span>By {shop.sellerId?.username}</span>
+                      </div>
+                      <div className="text-blue-600 dark:text-blue-400 font-medium group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                        View Shop →
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

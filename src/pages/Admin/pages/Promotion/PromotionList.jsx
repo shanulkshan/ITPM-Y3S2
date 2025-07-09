@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import GameBookingCancel from "./PromotionCancel";
+import PromotionCancel from "./PromotionCancel";
 import { PrinterIcon, PencilIcon, EyeIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useDarkMode } from "../../../../context/DarkModeContext";
@@ -141,7 +141,7 @@ const PromotionList = () => {
                                                 >
                                                     <PencilIcon className="w-4 h-4" />
                                                 </button>
-                                                <GameBookingCancel
+                                                <PromotionCancel
                                                     isOpen={isModalOpen}
                                                     toggleModal={toggleModal}
                                                     onDetele={() => handleDelete(data?._id)}

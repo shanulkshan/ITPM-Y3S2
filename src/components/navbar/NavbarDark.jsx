@@ -3,7 +3,6 @@ import CompanyLogo from "../CompanyLogo/CompanyLogo";
 import Menu from "./Menu";
 import Button from "../Button/Button";
 import NavbarData from "../../data/NavbarData";
-import GameRoomSideBar from "../../pages/User/GamingRoom/GameRoomSideBar";
 
 const NavbarDark = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,8 +58,6 @@ const NavbarDark = () => {
             <Menu className="hidden md:flex" links={NavbarData?.menuItems} />
           </div>
           <div className="hidden items-center gap-2 md:flex">
-        <GameRoomSideBar />
-
             <a href={"/employer"} className=" flex gap-2">
               <Button
                 bgColor="transparent linear-gradient(105deg, #e9ad0d 0%, #e15603 100%) 0% 0% no-repeat padding-box"

@@ -26,14 +26,6 @@ const NavbarData = {
       title: "QR Scan",
       link: "/qr-scan",
     },
-    {
-      title: "Gaming Room",
-      link: "/gaming-room",
-    },
-    {
-      title: "Admin",
-      link: "/admin",
-    },
   ],
 };
 
